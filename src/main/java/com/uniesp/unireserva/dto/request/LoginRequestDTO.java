@@ -1,12 +1,9 @@
 package com.uniesp.unireserva.dto.request;
 
-import com.uniesp.unireserva.enums.UserRole;
 import lombok.Data;
 
 @Data
-public class UserRequestDTO {
-    private String name;
+public class LoginRequestDTO {
     private String email;
     private String password;
-    private UserRole role;
 }
