@@ -1,4 +1,4 @@
-package com.uniesp.reservasala.dto.response;
+package com.uniesp.unireserva.dto.response;
 
 import com.uniesp.unireserva.enums.ReservationStatus;
 import lombok.Builder;
