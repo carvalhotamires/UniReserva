@@ -1,4 +1,4 @@
 package com.uniesp.unireserva.controller;
 
-public class Usercontroller {
+public class UserController {
 }
