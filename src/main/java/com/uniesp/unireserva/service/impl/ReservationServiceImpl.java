@@ -25,9 +25,9 @@ public class ReservationServiceImpl  implements ReservationService {
     private final RoomRepository roomRepository;
 
     @Override
-    public ReservationResponseDTO create(Long userId, ReservationRequestDTO dto) {
+    public ReservationResponseDTO create(String email, ReservationRequestDTO dto) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Room room = roomRepository.findById(dto.getRoomId())

@@ -6,6 +6,6 @@ import com.uniesp.unireserva.dto.response.ReservationResponseDTO;
 import java.util.List;
 
 public interface ReservationService {
-    ReservationResponseDTO create(Long userId, ReservationRequestDTO dto);
+    ReservationResponseDTO create(String email, ReservationRequestDTO dto);
     List<ReservationResponseDTO> findByUser(Long userId);
 }

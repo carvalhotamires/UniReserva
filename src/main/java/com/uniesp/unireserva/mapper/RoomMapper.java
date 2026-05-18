@@ -11,6 +11,7 @@ public class RoomMapper {
                 .name(dto.getName())
                 .type(dto.getType())
                 .capacity(dto.getCapacity())
+                .location(dto.getLocation())
                 .build();
     }
 

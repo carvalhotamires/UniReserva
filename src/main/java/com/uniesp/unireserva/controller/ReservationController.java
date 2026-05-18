@@ -5,6 +5,7 @@ import com.uniesp.unireserva.dto.response.ReservationResponseDTO;
 import com.uniesp.unireserva.service.interfaces.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -15,11 +16,14 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ReservationResponseDTO create(
-            @PathVariable Long userId,
-            @RequestBody ReservationRequestDTO dto) {
-        return reservationService.create(userId, dto);
+            @RequestBody ReservationRequestDTO dto,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+
+        return reservationService.create(email, dto);
     }
 
     @GetMapping("/user/{userId}")
