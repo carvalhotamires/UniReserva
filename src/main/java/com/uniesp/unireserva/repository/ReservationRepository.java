@@ -20,4 +20,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             LocalTime endTime,
             LocalTime startTime
     );
+
+    long countByReservationDateBetween(LocalDate inicio, LocalDate fim);
 }
