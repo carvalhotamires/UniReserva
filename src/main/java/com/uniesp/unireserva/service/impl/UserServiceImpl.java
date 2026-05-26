@@ -7,6 +7,7 @@ import com.uniesp.unireserva.mapper.UserMapper;
 import com.uniesp.unireserva.repository.UserRepository;
 import com.uniesp.unireserva.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDTO create(UserRequestDTO dto) {
         User user = UserMapper.toEntity(dto);
-        return UserMapper.toResponse(userRepository.save(user));
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User saved = userRepository.save(user);
+        return UserMapper.toResponse(saved);
     }
 
     @Override
@@ -36,5 +40,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .map(UserMapper::toResponse)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
     }
 }
