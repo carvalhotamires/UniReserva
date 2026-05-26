@@ -26,6 +26,6 @@ public class ReservationValidator {
         if (startTime.isAfter(endTime) || startTime.equals(endTime)) {
             throw new IllegalArgumentException("O horário de início deve ser anterior ao horário de término.");
         }
-        // Further validation could be added here, e.g., checking against operating hours
+
     }
 }

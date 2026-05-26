@@ -3,7 +3,10 @@ package com.uniesp.unireserva.controller;
 import com.uniesp.unireserva.dto.request.ReservationRequestDTO;
 import com.uniesp.unireserva.dto.response.ReservationResponseDTO;
 import com.uniesp.unireserva.service.interfaces.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,15 +18,34 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    // Criar uma reserva para um usuário
     @PostMapping("/{userId}")
-    public ReservationResponseDTO create(
+    public ResponseEntity<ReservationResponseDTO> create(
             @PathVariable Long userId,
-            @RequestBody ReservationRequestDTO dto) {
-        return reservationService.create(userId, dto);
+            @Valid @RequestBody ReservationRequestDTO dto) { // Adicionado @Valid
+
+        ReservationResponseDTO response = reservationService.create(userId, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // Buscar reservas de um usuário
     @GetMapping("/user/{userId}")
-    public List<ReservationResponseDTO> findByUser(@PathVariable Long userId) {
-        return reservationService.findByUser(userId);
+    public ResponseEntity<List<ReservationResponseDTO>> findByUser(@PathVariable Long userId) {
+        List<ReservationResponseDTO> reservation = reservationService.findByUser(userId);
+        return ResponseEntity.ok(reservation);
+    }
+
+    // Buscar reserva por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponseDTO> findById(@PathVariable Long id) {
+        ReservationResponseDTO reservation = reservationService.findById(id);
+        return ResponseEntity.ok(reservation);
+    }
+
+    // Excluir/cancelar reserva
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reservationService.delete(id); // aqui você aplica regra de negócio (ex: não apagar reserva passada)
+        return ResponseEntity.noContent().build();
     }
 }
