@@ -30,7 +30,7 @@ public class TestDataInitializer implements CommandLineRunner {
         roomRepository.deleteAll();
         userRepository.deleteAll();
 
-        // 1. Criar Usuários
+        // Criar Usuários
         User user1 = User.builder()
                 .name("Alice Silva")
                 .email("alice@example.com")
@@ -45,7 +45,7 @@ public class TestDataInitializer implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 
-        // 2. Criar Salas
+        // Criar Salas
         Room room1 = Room.builder()
                 .name("Sala de Reunião A")
                 .capacity(10)
@@ -60,8 +60,7 @@ public class TestDataInitializer implements CommandLineRunner {
 
         roomRepository.saveAll(Arrays.asList(room1, room2));
 
-        // 3. Criar Reservas
-        // Reserva para hoje na Sala A por Alice
+        // Criar Reservas
         Reservation res1 = Reservation.builder()
                 .user(user1)
                 .room(room1)
@@ -71,7 +70,6 @@ public class TestDataInitializer implements CommandLineRunner {
                 .status(ReservationStatus.CONFIRMED)
                 .build();
 
-        // Reserva para amanhã no Auditório por Bob
         Reservation res2 = Reservation.builder()
                 .user(user2)
                 .room(room2)
@@ -81,7 +79,6 @@ public class TestDataInitializer implements CommandLineRunner {
                 .status(ReservationStatus.CONFIRMED)
                 .build();
 
-        // Reserva para hoje na Sala A por Bob (conflito potencial se não houver validação)
         Reservation res3 = Reservation.builder()
                 .user(user2)
                 .room(room1)
