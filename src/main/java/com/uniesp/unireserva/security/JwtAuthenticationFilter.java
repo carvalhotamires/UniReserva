@@ -28,7 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Ignora endpoints públicos
         if (path.startsWith("/auth")
-                || path.startsWith("/h2-console")) {
+                || path.startsWith("/h2-console")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs")) {
 
             filterChain.doFilter(request, response);
             return;
