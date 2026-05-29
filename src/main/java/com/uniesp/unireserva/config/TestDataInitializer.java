@@ -26,9 +26,10 @@ public class TestDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Limpar dados existentes para garantir um estado limpo para o teste
-        reservationRepository.deleteAll();
-        roomRepository.deleteAll();
-        userRepository.deleteAll();
+        // Comentado temporariamente para permitir que o Flyway crie as tabelas primeiro
+        // reservationRepository.deleteAll();
+        // roomRepository.deleteAll();
+        // userRepository.deleteAll();
 
         // Criar Usuários
         User user1 = User.builder()
