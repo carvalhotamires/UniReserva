@@ -9,6 +9,7 @@ import lombok.Data;
 public class RoomResponseDTO {
     private Long id;
     private String name;
+    private String location;
     private RoomType type;
     private Integer capacity;
 }

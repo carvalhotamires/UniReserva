@@ -7,5 +7,6 @@ import lombok.Data;
 public class RoomRequestDTO {
     private String name;
     private RoomType type;
+    private String location;
     private Integer capacity;
 }

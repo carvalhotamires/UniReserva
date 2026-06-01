@@ -4,11 +4,14 @@ import com.uniesp.unireserva.entity.Reservation;
 import com.uniesp.unireserva.entity.Room;
 import com.uniesp.unireserva.entity.User;
 import com.uniesp.unireserva.enums.ReservationStatus;
+import com.uniesp.unireserva.enums.RoomType;
+import com.uniesp.unireserva.enums.UserRole;
 import com.uniesp.unireserva.repository.ReservationRepository;
 import com.uniesp.unireserva.repository.RoomRepository;
 import com.uniesp.unireserva.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -22,6 +25,7 @@ public class TestDataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -35,13 +39,15 @@ public class TestDataInitializer implements CommandLineRunner {
         User user1 = User.builder()
                 .name("Alice Silva")
                 .email("alice@example.com")
-                .password("senha123") // Em um projeto real, a senha seria criptografada
+                .password(passwordEncoder.encode("senha123")) // Em um projeto real, a senha seria criptografada
+                .role(UserRole.ADMIN)
                 .build();
 
         User user2 = User.builder()
                 .name("Bob Santos")
                 .email("bob@example.com")
-                .password("senha456")
+                .password(passwordEncoder.encode("senha456"))
+                .role(UserRole.STUDENT)
                 .build();
 
         userRepository.saveAll(Arrays.asList(user1, user2));
@@ -51,12 +57,14 @@ public class TestDataInitializer implements CommandLineRunner {
                 .name("Sala de Reunião A")
                 .capacity(10)
                 .location("Andar 1")
+                .type(RoomType.LABORATORY)
                 .build();
 
         Room room2 = Room.builder()
                 .name("Auditório Principal")
                 .capacity(50)
                 .location("Térreo")
+                .type(RoomType.AUDITORIUM)
                 .build();
 
         roomRepository.saveAll(Arrays.asList(room1, room2));

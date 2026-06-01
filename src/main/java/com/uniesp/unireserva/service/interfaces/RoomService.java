@@ -9,4 +9,7 @@ public interface RoomService {
     RoomResponseDTO create(RoomRequestDTO dto);
     List<RoomResponseDTO> findAll();
     RoomResponseDTO findById(Long id);
+    RoomResponseDTO update(Long id, RoomRequestDTO dto);
+    RoomResponseDTO partialUpdate(Long id, RoomRequestDTO dto);
+    void delete(Long id);
 }
