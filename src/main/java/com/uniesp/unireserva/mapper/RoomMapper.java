@@ -10,6 +10,7 @@ public class RoomMapper {
         return Room.builder()
                 .name(dto.getName())
                 .type(dto.getType())
+                .location(dto.getLocation())
                 .capacity(dto.getCapacity())
                 .build();
     }
@@ -19,6 +20,7 @@ public class RoomMapper {
                 .id(room.getId())
                 .name(room.getName())
                 .type(room.getType())
+                .location(room.getLocation())
                 .capacity(room.getCapacity())
                 .build();
     }
