@@ -21,6 +21,8 @@ public interface ReservationService {
     // (Opcional) Atualizar uma reserva - so se seu domínio permitir
     ReservationResponseDTO update(Long id, ReservationRequestDTO dto);
 
+    ReservationResponseDTO partialUpdate(Long id, ReservationRequestDTO dto);
+
     // Cancelar / deletar reserva
     void delete(Long id);
 }
