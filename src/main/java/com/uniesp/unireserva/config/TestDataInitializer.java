@@ -39,14 +39,14 @@ public class TestDataInitializer implements CommandLineRunner {
         User user1 = User.builder()
                 .name("Alice Silva")
                 .email("alice@example.com")
-                .password(passwordEncoder.encode("senha123")) // Em um projeto real, a senha seria criptografada
+                .password(passwordEncoder.encode("123")) // Em um projeto real, a senha seria criptografada
                 .role(UserRole.ADMIN)
                 .build();
 
         User user2 = User.builder()
                 .name("Bob Santos")
                 .email("bob@example.com")
-                .password(passwordEncoder.encode("senha456"))
+                .password(passwordEncoder.encode("123"))
                 .role(UserRole.STUDENT)
                 .build();
 

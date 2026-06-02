@@ -5,6 +5,7 @@ import com.uniesp.unireserva.dto.response.UserResponseDTO;
 import com.uniesp.unireserva.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDTO> findAll() {
         return userService.findAll();
     }
