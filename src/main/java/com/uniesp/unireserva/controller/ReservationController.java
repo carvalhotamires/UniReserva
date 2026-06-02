@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class ReservationController {
     public ResponseEntity<ReservationResponseDTO> findById(@PathVariable Long id) {
         ReservationResponseDTO reservation = reservationService.findById(id);
         return ResponseEntity.ok(reservation);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ReservationResponseDTO> findAll() {
+        return reservationService.findAll();
     }
 
     // Excluir/cancelar reserva
