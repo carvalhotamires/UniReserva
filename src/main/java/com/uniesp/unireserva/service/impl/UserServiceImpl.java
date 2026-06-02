@@ -39,14 +39,7 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toResponse)
                 .toList();
     }
-    /*
-    @Override
-    public UserResponseDTO findById(Long id) {
-        return userRepository.findById(id)
-                .map(UserMapper::toResponse)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-    }*/
     @Override
     public UserResponseDTO findById(Long id) {
 
@@ -73,24 +66,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toResponse(user);
     }
 
-    /*
-    @Override
-    public UserResponseDTO update(Long id, UserRequestDTO dto) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuário não encontrado"));
-
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getRole());
-
-        User updatedUser = userRepository.save(user);
-
-        return UserMapper.toResponse(updatedUser);
-    }
-     */
     @Override
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
 
@@ -123,34 +99,7 @@ public class UserServiceImpl implements UserService {
 
         return UserMapper.toResponse(userRepository.save(user));
     }
-/*
-    @Override
-    public UserResponseDTO partialUpdate(Long id, UserRequestDTO dto) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuário não encontrado"));
-
-        if (dto.getName() != null) {
-            user.setName(dto.getName());
-        }
-
-        if (dto.getEmail() != null) {
-            user.setEmail(dto.getEmail());
-        }
-
-        if (dto.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        }
-
-        if (dto.getRole() != null) {
-            user.setRole(dto.getRole());
-        }
-
-        User updatedUser = userRepository.save(user);
-
-        return UserMapper.toResponse(updatedUser);
-    }*/
 @Override
 public UserResponseDTO partialUpdate(Long id, UserRequestDTO dto) {
 
@@ -188,17 +137,7 @@ public UserResponseDTO partialUpdate(Long id, UserRequestDTO dto) {
 
     return UserMapper.toResponse(userRepository.save(user));
 }
-/*
-    @Override
-    public void delete(Long id) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuário não encontrado"));
-
-        userRepository.delete(user);
-    }
-*/
     @Override
     public void delete(Long id) {
 
