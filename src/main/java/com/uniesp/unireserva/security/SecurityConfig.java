@@ -43,6 +43,11 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
+                        // libera as rotas da sua API que você está testando
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/rooms/**").permitAll()
+                        .requestMatchers("/reservations/**").permitAll()
+                        // qualquer outra rota continua exigindo autenticação
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

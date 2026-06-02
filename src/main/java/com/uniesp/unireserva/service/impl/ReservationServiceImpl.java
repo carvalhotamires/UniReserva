@@ -84,33 +84,76 @@ public class ReservationServiceImpl implements ReservationService {
                 .map(ReservationMapper::toResponse)
                 .toList();
     }
-/*
+
     @Override
     public ReservationResponseDTO update(Long id, ReservationRequestDTO dto) {
+
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         Room room = roomRepository.findById(dto.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Sala não encontrada"));
 
-
-
+// Opcional: checar conflito ao atualizar
+        boolean conflict = reservationRepository
+                .existsByRoomAndReservationDateAndStartTimeLessThanAndEndTimeGreaterThan(
+                        room,
+                        dto.getReservationDate(),
+                        dto.getEndTime(),
+                        dto.getStartTime()
+                );
+        if (conflict) {
+            throw new ConflictException("Já existe uma reserva para esta sala neste horário.");
+        }
         reservation.setRoom(room);
         reservation.setReservationDate(dto.getReservationDate());
         reservation.setStartTime(dto.getStartTime());
         reservation.setEndTime(dto.getEndTime());
 
-        Reservation saved = reservationRepository.save(reservation);
-        return ReservationMapper.toResponse(saved);
-    }*/
+        Reservation updatedReservation = reservationRepository.save(reservation);
+
+        return ReservationMapper.toResponse(updatedReservation);
+    }
+
+    @Override
+    public ReservationResponseDTO partialUpdate(Long id, ReservationRequestDTO dto) {
+
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+
+        // Se vier roomId, troca a sala
+        if (dto.getRoomId() != null) {
+            Room room = roomRepository.findById(dto.getRoomId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Sala não encontrada"));
+            reservation.setRoom(room);
+        }
+
+        if (dto.getReservationDate() != null) {
+            reservation.setReservationDate(dto.getReservationDate());
+        }
+
+        if (dto.getStartTime() != null) {
+            reservation.setStartTime(dto.getStartTime());
+        }
+
+        if (dto.getEndTime() != null) {
+            reservation.setEndTime(dto.getEndTime());
+        }
+
+        // Se quiser, pode fazer verificação de conflito aqui também,
+        // mas só quando data/hora/sala forem alteradas.
+
+        Reservation updatedReservation = reservationRepository.save(reservation);
+
+        return ReservationMapper.toResponse(updatedReservation);
+    }
 
     @Override
     public void delete(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
-        // aqui você pode colocar regra de negócio, ex:
-        // se a data já passou, não permitir excluir
+        // Exemplo de regra:
         // if (reservation.getReservationDate().isBefore(LocalDate.now())) {
         //     throw new BusinessException("Não é possível cancelar uma reserva passada.");
         // }
