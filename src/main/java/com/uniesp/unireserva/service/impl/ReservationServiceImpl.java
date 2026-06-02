@@ -84,7 +84,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .map(ReservationMapper::toResponse)
                 .toList();
     }
-
+/*
     @Override
     public ReservationResponseDTO update(Long id, ReservationRequestDTO dto) {
         Reservation reservation = reservationRepository.findById(id)
@@ -102,7 +102,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation saved = reservationRepository.save(reservation);
         return ReservationMapper.toResponse(saved);
-    }
+    }*/
 
     @Override
     public void delete(Long id) {

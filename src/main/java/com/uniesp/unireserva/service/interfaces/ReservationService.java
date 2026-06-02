@@ -19,7 +19,7 @@ public interface ReservationService {
     List<ReservationResponseDTO> findByUser(Long userId);
 
     // (Opcional) Atualizar uma reserva - so se seu domínio permitir
-    ReservationResponseDTO update(Long id, ReservationRequestDTO dto);
+    //ReservationResponseDTO update(Long id, ReservationRequestDTO dto);
 
     // Cancelar / deletar reserva
     void delete(Long id);
