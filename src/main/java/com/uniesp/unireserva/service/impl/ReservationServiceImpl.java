@@ -15,6 +15,12 @@ import com.uniesp.unireserva.repository.UserRepository;
 import com.uniesp.unireserva.service.interfaces.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
+
+
+import com.uniesp.unireserva.enums.UserRole;
 
 import java.util.List;
 
@@ -91,10 +97,12 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
+        // ✅ Verifica permissão
+        validarPermissaoSobreReserva(reservation);
+
         Room room = roomRepository.findById(dto.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Sala não encontrada"));
 
-// Opcional: checar conflito ao atualizar
         boolean conflict = reservationRepository
                 .existsByRoomAndReservationDateAndStartTimeLessThanAndEndTimeGreaterThan(
                         room,
@@ -105,6 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (conflict) {
             throw new ConflictException("Já existe uma reserva para esta sala neste horário.");
         }
+
         reservation.setRoom(room);
         reservation.setReservationDate(dto.getReservationDate());
         reservation.setStartTime(dto.getStartTime());
@@ -115,13 +124,19 @@ public class ReservationServiceImpl implements ReservationService {
         return ReservationMapper.toResponse(updatedReservation);
     }
 
+    private void validarPermissaoSobreReserva(Reservation reservation) {
+    }
+
+
     @Override
     public ReservationResponseDTO partialUpdate(Long id, ReservationRequestDTO dto) {
 
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
-        // Se vier roomId, troca a sala
+        // ✅ Verifica permissão
+        validarPermissaoSobreReserva(reservation);
+
         if (dto.getRoomId() != null) {
             Room room = roomRepository.findById(dto.getRoomId())
                     .orElseThrow(() -> new ResourceNotFoundException("Sala não encontrada"));
@@ -140,9 +155,6 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setEndTime(dto.getEndTime());
         }
 
-        // Se quiser, pode fazer verificação de conflito aqui também,
-        // mas só quando data/hora/sala forem alteradas.
-
         Reservation updatedReservation = reservationRepository.save(reservation);
 
         return ReservationMapper.toResponse(updatedReservation);
@@ -153,10 +165,19 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
-        // Exemplo de regra:
-        // if (reservation.getReservationDate().isBefore(LocalDate.now())) {
-        //     throw new BusinessException("Não é possível cancelar uma reserva passada.");
-        // }
+        // Pega quem está logado
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User loggedUser = userRepository.findByEmail(auth.getName())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Usuário logado não encontrado"));
+
+        boolean isAdmin = loggedUser.getRole() == UserRole.ADMIN;
+        boolean isOwner = reservation.getUser().getId().equals(loggedUser.getId());
+
+        if (!isAdmin && !isOwner) {
+            throw new AccessDeniedException("Você não pode excluir esta reserva");
+        }
 
         reservationRepository.delete(reservation);
     }
